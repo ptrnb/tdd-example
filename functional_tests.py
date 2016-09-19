@@ -1,11 +1,13 @@
 from selenium import webdriver
+# from selenium.webdriver.safari.webdriver import WebDriver as Safari
 import unittest
 
 class NewVisitorTest(unittest.TestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
-        self.browser.implicity_wait(3)
+        # self.browser = Safari()
+        # self.browser.implicity_wait(3)
 
     def tearDown(self):
         self.browser.quit()
@@ -16,16 +18,33 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:8000')
 
         self.assertIn('To-Do', self.browser.title)
-
-        self.fail('Finish the test!')
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do', header_text)
 
         # She is invited to enter a to-do item straight away
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(
+            inputbox.get_attribute('placeholder')
+            'Enter a to-do item'
+        )
+
         # She type "Buy peacock feathers" into a text box
+        inputbox.send_keys('Buy peacock feathers')
+
         # When she hits enter, the page updates and now the page
         # lists "1: Buy peacock feathers" as an item in the to-do list
+        inputbox.send_keys(Keys.ENTER)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == '1: Buy peackock feathers' for row in rows)
+            )
         # There is still a text box inviting her to add another item, she enters
         # "use peacock feathers to make a fly"
         # The page updates again, shows both items on her list
+        self.fail('Finish the test!')
+
         # Edith wonders whether the site will remember her list, then sees
         # that the site has generated a unique URL for her -- there is 
         # some explanatory text to that effect
