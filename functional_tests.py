@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 # from selenium.webdriver.safari.webdriver import WebDriver as Safari
 import unittest
+import time
 
 class NewVisitorTest(unittest.TestCase):
 
@@ -17,6 +18,7 @@ class NewVisitorTest(unittest.TestCase):
         # Edith has heard about a cool new online to-do app
         # She goes to check out its homepage
         self.browser.get('http://localhost:8000')
+
 
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
@@ -38,10 +40,10 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text == '1: Buy peackock feathers' for row in rows),
-            "New to-do item did not appear in table"
-            )
+        self.assertIn(
+            '1: Buy peacock feathers', [row.text for row in rows])
+        self.assertIn(
+            '2: Use peacock feathers to make a fly', [row.text for row in rows])
         # There is still a text box inviting her to add another item, she enters
         # "use peacock feathers to make a fly"
         # The page updates again, shows both items on her list
