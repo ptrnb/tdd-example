@@ -31,7 +31,7 @@ def _update_settings(source_folder, site_name):
     sed(settings_path, "DEBUG = True", "DEBUG = False")
     sed(settings_path,
         'ALLOWED_HOSTS =.+$',
-        'ALLOWED_HOSTS = [{0}]'.format(site_name)
+        'ALLOWED_HOSTS = ["{0}"]'.format(site_name)
         )
     secret_key_file = source_folder + '/superlists/secret_key.py'
     if not exists(secret_key_file):
@@ -44,6 +44,7 @@ def _update_virtualenv(source_folder):
     virtualenv_folder = source_folder + '/../virtualenv'
     if not exists(virtualenv_folder + '/bin/pip'):
         run('virtualenv --python=python3 {0}'.format(virtualenv_folder))
+        run('{0}/bin/pip install pip --upgrade'.format(virtualenv_folder))
     run('{0}/bin/pip install -r {1}/requirements.txt'.format(
         virtualenv_folder, source_folder))
 
