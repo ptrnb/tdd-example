@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/sh 
 #
 # gunicorn_SITENAME        Startup script for gunicorn for SITENAME
 #
 # chkconfig: - 86 14
 # processname: gunicorn
-# pidfile:
+# pidfile: 
 # description: Python application server
 #
 ### BEGIN INIT INFO
